@@ -9,63 +9,68 @@ This document outlines the frontend architectural principles, rendering strategi
 ```mermaid
 flowchart TD
     subgraph Browser [Client Viewport]
-        DOM[Static HTML/CSS Shell]
-        Hydrate[Lightweight Hydration / Island]
-        UserAction[User Interaction]
+        DOM[Static High-Contrast Shell]
+        UrlParser[URL Parameter Parser ?ref=]
+        VettingEngine[Client Vetting & State Machine]
+        UserAction[User Submits Credentials]
     end
 
     subgraph EdgeCDN [Edge Network / Cloudflare Pages]
-        Cache[Global Edge Asset Cache]
+        Cache[Edge Asset Cache & Inlined CSS]
     end
 
-    subgraph HeadlessData [Headless Source & Services]
-        CMS[Content / Form Service]
+    subgraph HeadlessData [Headless CMS & Edge API]
+        VettingEndpoint[API /api/cms/forms/submit/form-submissions]
+        D1[Cloudflare D1 Ledger]
     end
 
     Cache -->|Sub-100ms TTFB| DOM
-    DOM -->|Progressive Enhancement| Hydrate
-    UserAction -->|Async Submission| CMS
+    DOM --> UrlParser
+    UrlParser --> VettingEngine
+    UserAction -->|Async Transmission| VettingEndpoint
+    VettingEndpoint --> D1
 ```
 
 ---
 
 ## Architectural Principles
 
-### 1. Minimal Runtime JS & React 19 Islands
-- **Astro v7 Core:** Server-side rendering (SSR) and static generation on Cloudflare Pages guarantees that baseline editorial pages, tasting archives, and menus ship with zero extraneous client JavaScript.
-- **Selective React 19 Islands:** Interactive widgets (invitation verification, event booking forms, and dynamic tasting archives) hydrate as isolated React 19 islands using `client:visible` or `client:idle`.
-- **Zero Hydration Overhead:** Editorial content remains pure static markup, avoiding the hydration mismatch and CPU stalls typical of monolithic SPA architectures.
+### 1. Zero-Framework Runtime Baseline & Astro v7
+- **Astro v7 Engine:** Built using Astro v7 with Cloudflare Pages adapter. All public editorial content, tasting session archives, and culinary manifestos compile to static HTML at build time with **zero client-side framework overhead**.
+- **Progressive Client Script Modules:** Interactive components (the member vetting form and the session countdown timer) use lightweight, zero-dependency vanilla TypeScript modules bundled natively by Astro.
+- **Inlined Critical Stylesheets:** Configured with `build: { inlineStylesheets: "always" }`, ensuring stylesheets are embedded directly into document `<head>`, eliminating network round-trips for CSS.
 
 ### 2. Core Web Vitals Strategy
 
 | Metric | Target | Strategy & Implementation |
 | :--- | :--- | :--- |
-| **LCP** (Largest Contentful Paint) | $\le$ 2.5s (Achieved: **0.7s**) | <ul><li>Inlined critical stylesheets via Astro's `inlineStylesheets: "always"` pipeline</li><li>Hero imagery formatted as modern AVIF/WebP with preloading hints</li><li>Global edge delivery via Cloudflare Anycast CDN for ultra-low TTFB</li></ul> |
-| **INP** (Interaction to Next Paint) | $\le$ 200ms (Achieved: **35ms**) | <ul><li>Zero blocking scripts on the main thread during boot</li><li>Micro-interactions and dialogs managed with lightweight, non-blocking React state</li><li>Asynchronous network requests handled with debounced execution and `AbortController`</li></ul> |
-| **CLS** (Cumulative Layout Shift) | $\le$ 0.1 (Achieved: **0.00**) | <ul><li>Strict aspect-ratio rules across editorial culinary photography</li><li>Font face declarations specify `font-display: swap` with matched size-adjust metric overrides</li><li>Layout structure retains fixed spatial dimensions prior to dynamic content arrival</li></ul> |
+| **LCP** (Largest Contentful Paint) | $\le$ 2.5s (Achieved: **0.7s**) | <ul><li>Zero blocking external stylesheets via `inlineStylesheets: "always"`</li><li>LightningCSS minification (`cssMinify: 'lightningcss'`) micro-optimizes the final CSS footprint</li><li>Edge caching on Cloudflare Pages Anycast network delivers sub-100ms TTFB worldwide</li></ul> |
+| **INP** (Interaction to Next Paint) | $\le$ 200ms (Achieved: **35ms**) | <ul><li>Zero hydration lag: all form elements and action buttons are immediately interactive on initial paint</li><li>No monolithic SPA runtime on the main thread</li><li>Debounced async submissions and non-blocking state updates</li></ul> |
+| **CLS** (Cumulative Layout Shift) | $\le$ 0.1 (Achieved: **0.00**) | <ul><li>Tabular numeric styling (`font-variant-numeric: tabular-nums`) prevents shifts during countdown ticks</li><li>Monospace typography guarantees predictable character widths across all devices</li><li>Editorial photography containers reserve fixed spatial aspect ratios</li></ul> |
 
 ---
 
-## Styling & Asset Pipeline
+## Authentic Component Architecture Showcases
 
-- **Tailwind CSS v4 & LightningCSS:** Utilizes the next-generation Tailwind v4 engine paired with LightningCSS minification for micro-optimized CSS bundles.
-- **Inlined Critical CSS:** Eliminates render-blocking external stylesheet network requests by embedding critical styling directly into the document `<head>`.
-- **High-Contrast Editorial Typography:** Monochromatic palette with typographic hierarchy optimized for dark-mode rendering, meeting strict WCAG 2.1 AA contrast ratios.
+Public sanitized implementations of the core UI components are available directly in the repository:
+
+1. **Member Vetting & Admission Form ([`components/SanitizedRegistrationForm.astro`](../components/SanitizedRegistrationForm.astro)):**
+   - High-contrast brutalist aesthetic (`#ede5d5` parchment background, `#0d0d0d` borders, offset box shadows).
+   - Ingests and pre-fills URL query parameters (`?ref=CODE`) for sponsored member referrals.
+   - Enforces multi-channel alternative communication handles (Signal, Telegram, PGP).
+   - Multi-phase async state machine with loading spinners and manual review confirmation text.
+
+2. **Session Countdown Timer ([`components/SanitizedCountdown.astro`](../components/SanitizedCountdown.astro)):**
+   - Pure vanilla JavaScript timer interval without external library dependencies.
+   - Tabular monospace numbers preventing horizontal and vertical layout shifts.
+
+3. **Sanitized TypeScript Vetting Pattern ([`examples/sanitized-ui-pattern.ts`](../examples/sanitized-ui-pattern.ts)):**
+   - Independent TypeScript module demonstrating URL referral parameter parsing, identity handle validation, and async error recovery.
 
 ---
 
-## State Management & Defensive Validation
+## Design System & Typography
 
-- **Encapsulated Island State:** Form validation and modal dialogues operate within self-contained components without bloated global state stores.
-- **Client-Side Schema Enforcement:** Input validation triggers immediately upon user action, providing instantaneous feedback prior to network dispatch.
-- **Network Resilience:** External API calls leverage `AbortSignal` with timeout safety and structured error classification.
-
-A representative example of this defensive client interaction pattern is documented in [`examples/sanitized-ui-pattern.ts`](../examples/sanitized-ui-pattern.ts).
-
----
-
-## Accessibility (a11y) & UX
-
-- **Semantic Landmark Hierarchy:** Built with `<main>`, `<section>`, `<nav>`, and `<dialog>` elements for native assistive technology support.
-- **Keyboard Navigation & Traps:** Interactive dialogs and navigation drawers support full tab navigation and escape-key dismissal.
-- **Reduced Motion Support:** Respects `prefers-reduced-motion` to bypass transition effects for sensitive viewports.
+- **High-Contrast Editorial Brutalism:** Monochromatic color scheme with warm parchment contrast and accent crimson (`#7a1f28`).
+- **Tactile UI Elements:** 2px high-contrast borders and sharp offset shadows (`box-shadow: 6px 6px 0 #0d0d0d`) with snappy hover translations (`translate(-3px, -3px)`).
+- **Accessibility:** Full keyboard navigability and WCAG 2.1 AA compliant contrast ratios across all text elements.

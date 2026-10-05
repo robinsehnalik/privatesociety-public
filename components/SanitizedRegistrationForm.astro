@@ -1,0 +1,315 @@
+---
+/**
+ * Sanitized Frontend Component Showcase: Member Vetting & Invitation Form
+ * 
+ * Source Context: privatesocietylab.com (RegistrationForm.astro)
+ * Demonstrates:
+ * 1. High-contrast brutalist aesthetic (offset box shadows, monospace technical tokens).
+ * 2. Pre-filling referral codes from URL parameters (?ref=code).
+ * 3. Multi-field vetting for alternative communications (Signal, Telegram, PGP).
+ * 4. Zero-framework progressive enhancement with native client script.
+ */
+
+interface Props {
+  endpoint?: string;
+  tag?: string;
+  badge?: string;
+  title?: string;
+  description?: string;
+}
+
+const {
+  endpoint = "/api/cms/forms/submit/form-submissions",
+  tag = "DOC // VETTING-PROTOCOL",
+  badge = "ACCESS OPEN",
+  title = "REQUEST ADMISSION",
+  description = "Attendance is strictly capped per assembly. Submissions are subject to curator review."
+} = Astro.props;
+---
+
+<div class="registration-card" id="register">
+  <div class="registration-doc-bar">
+    <span>{tag}</span>
+    <span class="open-badge">{badge}</span>
+  </div>
+
+  <div class="registration-header">
+    <h2 class="registration-title font-display">{title}</h2>
+    <p class="registration-description">
+      {description}
+    </p>
+  </div>
+
+  <form id="vetting-form" class="registration-form" data-endpoint={endpoint}>
+    <div class="form-group">
+      <label for="name" class="form-label">FULL NAME / NOM DE PLUME <span class="required">*</span></label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        required
+        placeholder="e.g. S. Vance"
+        class="form-input"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="email" class="form-label">CONFIDENTIAL EMAIL <span class="required">*</span></label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        required
+        placeholder="vance@domain.com"
+        class="form-input"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="messagingId" class="form-label">MESSAGING ID (SIGNAL / TELEGRAM / PGP) <span class="required">*</span></label>
+      <input
+        type="text"
+        id="messagingId"
+        name="messagingId"
+        required
+        placeholder="@username or Signal number"
+        class="form-input"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="referral" class="form-label">SPONSORING MEMBER / REFERRAL CODE</label>
+      <input
+        type="text"
+        id="referral"
+        name="referral"
+        placeholder="OPTIONAL CODE"
+        class="form-input font-mono uppercase"
+      />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" id="submit-btn" class="submit-button font-display">
+        <span class="btn-text">TRANSMIT DOSSIER</span>
+        <span class="btn-spinner hidden" id="spinner"></span>
+      </button>
+    </div>
+
+    <div id="form-feedback" class="form-feedback hidden"></div>
+  </form>
+</div>
+
+<style>
+  .registration-card {
+    background: #ede5d5;
+    border: 2px solid #0d0d0d;
+    padding: 2.25rem;
+    max-width: 680px;
+    margin: 2.5rem auto;
+    box-shadow: 6px 6px 0 #0d0d0d;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    transition: transform 250ms ease, box-shadow 250ms ease;
+  }
+
+  .registration-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 10px 10px 0 #0d0d0d;
+  }
+
+  .registration-doc-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    border-bottom: 2px solid #0d0d0d;
+    padding-bottom: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .open-badge {
+    background: #7a1f28;
+    color: #ede5d5;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+
+  .registration-header {
+    margin-bottom: 2rem;
+  }
+
+  .registration-title {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    margin: 0 0 0.75rem 0;
+    line-height: 0.98;
+    color: #0d0d0d;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  .registration-description {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: #5c584f;
+    margin: 0;
+  }
+
+  .registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #0d0d0d;
+    font-weight: 700;
+  }
+
+  .required {
+    color: #7a1f28;
+  }
+
+  .form-input {
+    background: transparent;
+    border: 2px solid #0d0d0d;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    color: #0d0d0d;
+    outline: none;
+    transition: background 150ms ease;
+  }
+
+  .form-input:focus {
+    background: #fff;
+    box-shadow: 3px 3px 0 #0d0d0d;
+  }
+
+  .submit-button {
+    background: #0d0d0d;
+    color: #ede5d5;
+    border: 2px solid #0d0d0d;
+    padding: 1.1rem 2rem;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    transition: background 150ms ease, color 150ms ease;
+  }
+
+  .submit-button:hover:not(:disabled) {
+    background: #7a1f28;
+    border-color: #7a1f28;
+  }
+
+  .submit-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .form-feedback {
+    padding: 1rem;
+    border: 2px solid #0d0d0d;
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+
+  .form-feedback.success {
+    background: #e2ecd9;
+    border-color: #2b5927;
+    color: #1b3819;
+  }
+
+  .form-feedback.error {
+    background: #fde8e8;
+    border-color: #7a1f28;
+    color: #7a1f28;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+</style>
+
+<script>
+  function initVettingForm() {
+    const form = document.getElementById("vetting-form") as HTMLFormElement | null;
+    if (!form) return;
+
+    // Parse URL query parameter: ?ref=CODE
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCode = urlParams.get("ref");
+    if (refCode) {
+      const referralInput = document.getElementById("referral") as HTMLInputElement | null;
+      if (referralInput) referralInput.value = refCode.toUpperCase();
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const endpoint = form.getAttribute("data-endpoint") || "/api/cms/forms/submit/form-submissions";
+      const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement | null;
+      const feedback = document.getElementById("form-feedback");
+
+      const formData = new FormData(form);
+      const data = {
+        name: formData.get("name"),
+        email: formData.get("email"),
+        messagingId: formData.get("messagingId"),
+        referral: formData.get("referral") || "",
+        status: "pending"
+      };
+
+      if (submitBtn) submitBtn.disabled = true;
+      if (feedback) {
+        feedback.className = "form-feedback hidden";
+        feedback.textContent = "";
+      }
+
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          form.reset();
+          if (feedback) {
+            feedback.className = "form-feedback success";
+            feedback.innerHTML = "<strong>DOSSIER RECEIVED</strong><br>Your credentials are under manual review by the collective committee. Secure verification instructions will follow.";
+          }
+        } else {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.message || "Transmission failed. Verify credentials and retry.");
+        }
+      } catch (err: any) {
+        if (feedback) {
+          feedback.className = "form-feedback error";
+          feedback.textContent = err.message || "An unexpected network error occurred.";
+        }
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initVettingForm);
+  } else {
+    initVettingForm();
+  }
+</script>

@@ -1,0 +1,163 @@
+---
+/**
+ * Sanitized Frontend Component Showcase: Monospace Tasting Session Countdown
+ * 
+ * Source Context: privatesocietylab.com (Countdown.astro)
+ * Demonstrates:
+ * 1. Zero-dependency real-time interval timer.
+ * 2. Monospace font layout ensuring zero Cumulative Layout Shift (CLS = 0.00) on number updates.
+ * 3. Brutalist aesthetic with high-contrast borders and sharp typography.
+ */
+
+interface Props {
+  targetDate?: string;
+  title?: string;
+  sub?: string;
+}
+
+const {
+  targetDate = "2026-11-15T18:00:00Z",
+  title = "SESSION #04 COUNTDOWN",
+  sub = "LIVE DISPATCH TIMER"
+} = Astro.props;
+---
+
+<div class="countdown-card font-mono" data-target={targetDate}>
+  <div class="countdown-header-line">
+    <span class="countdown-tag">{title}</span>
+    <span class="countdown-sub">{sub}</span>
+  </div>
+
+  <div class="timer-grid">
+    <div class="timer-unit">
+      <span id="cd-days" class="timer-num">00</span>
+      <span class="timer-label">DAYS</span>
+    </div>
+    <span class="timer-sep">:</span>
+    <div class="timer-unit">
+      <span id="cd-hours" class="timer-num">00</span>
+      <span class="timer-label">HOURS</span>
+    </div>
+    <span class="timer-sep">:</span>
+    <div class="timer-unit">
+      <span id="cd-minutes" class="timer-num">00</span>
+      <span class="timer-label">MINUTES</span>
+    </div>
+    <span class="timer-sep">:</span>
+    <div class="timer-unit">
+      <span id="cd-seconds" class="timer-num">00</span>
+      <span class="timer-label">SECONDS</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .countdown-card {
+    background: #ede5d5;
+    border: 2px solid #0d0d0d;
+    padding: 1.5rem 2rem;
+    max-width: 600px;
+    margin: 2rem auto;
+    box-shadow: 4px 4px 0 #0d0d0d;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .countdown-header-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #0d0d0d;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .countdown-tag {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #0d0d0d;
+  }
+
+  .countdown-sub {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #7a1f28;
+    letter-spacing: 0.08em;
+  }
+
+  .timer-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .timer-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 4rem;
+  }
+
+  .timer-num {
+    font-size: 2.2rem;
+    font-weight: 900;
+    line-height: 1;
+    color: #0d0d0d;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timer-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #5c584f;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+  }
+
+  .timer-sep {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #7a1f28;
+    margin-top: -0.8rem;
+  }
+</style>
+
+<script>
+  function initCountdown() {
+    const card = document.querySelector(".countdown-card");
+    if (!card) return;
+
+    const targetStr = card.getAttribute("data-target") || "2026-11-15T18:00:00Z";
+    const target = new Date(targetStr).getTime();
+
+    const daysEl = document.getElementById("cd-days");
+    const hoursEl = document.getElementById("cd-hours");
+    const minsEl = document.getElementById("cd-minutes");
+    const secsEl = document.getElementById("cd-seconds");
+
+    function update() {
+      const now = Date.now();
+      const diff = Math.max(0, target - now);
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+      if (daysEl) daysEl.textContent = String(days).padStart(2, "0");
+      if (hoursEl) hoursEl.textContent = String(hours).padStart(2, "0");
+      if (minsEl) minsEl.textContent = String(mins).padStart(2, "0");
+      if (secsEl) secsEl.textContent = String(secs).padStart(2, "0");
+    }
+
+    update();
+    setInterval(update, 1000);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCountdown);
+  } else {
+    initCountdown();
+  }
+</script>
