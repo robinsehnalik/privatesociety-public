@@ -16,31 +16,32 @@
 | :--- | :--- |
 | **Site Type** | Invitation-Only Culinary Collective & Experiential Member Portal |
 | **Status** | Live in Production |
-| **Frontend Stack** | Astro v7 / Tailwind CSS v4 (LightningCSS) / Zero-Runtime TS Scripts |
-| **Hosting & CDN** | Cloudflare Pages (Global Anycast Edge Network) |
+| **Frontend Stack** | Astro v7 / Tailwind CSS v4 (LightningCSS) / Vanilla TypeScript |
+| **Hosting & Edge Platform** | Cloudflare Pages (Global Anycast Edge Network) |
+| **Backend Integration** | Cloudflare D1 (SQL) / Cloudflare Pages Functions / Resend API |
 
 ---
 
-## Core Web Vitals & Performance Audits
+## Core Web Vitals & Performance Budget
 
-Optimized to satisfy strict mobile-first page experience standards:
+The architecture enforces strict performance constraints to consistently satisfy Google Core Web Vitals thresholds:
 
-| Metric | Target | Result | Strategy |
-| :--- | :--- | :--- | :--- |
-| **LCP** (Largest Contentful Paint) | $\le$ 2.5s | **0.7s** | Inlined critical stylesheets (`inlineStylesheets: "always"`), LightningCSS, edge caching |
-| **INP** (Interaction to Next Paint) | $\le$ 200ms | **35ms** | Zero main-thread framework runtime, non-blocking script handlers, passive event listeners |
-| **CLS** (Cumulative Layout Shift) | $\le$ 0.1 | **0.00** | Tabular numbers (`tabular-nums`), monospace layout grids, reserved media aspect ratios |
+| Metric | Target Budget | Architectural Strategy |
+| :--- | :--- | :--- |
+| **LCP** (Largest Contentful Paint) | $\le$ 2.5s | Inlined critical stylesheets (`inlineStylesheets: "always"`), LightningCSS, edge caching |
+| **INP** (Interaction to Next Paint) | $\le$ 200ms | Zero main-thread framework runtime on public pages, non-blocking event handlers |
+| **CLS** (Cumulative Layout Shift) | $\le$ 0.1 | Tabular numbers (`tabular-nums`), monospace layout grids, reserved media aspect ratios |
 
 ---
 
 ## Key Frontend Engineering Highlights
 
-- **Zero-Framework Runtime Baseline:** Built with Astro v7. Editorial layouts, tasting archives, and menus ship with zero JavaScript framework runtime, delivering maximum responsiveness.
-- **Critical CSS Inlining:** Stylesheets are compiled with LightningCSS and inlined directly into document `<head>`, completely eliminating render-blocking CSS network roundtrips.
+- **Zero-Framework Runtime Baseline:** Built with Astro v7. Editorial layouts, tasting archives, and menus ship with zero JavaScript framework runtime, delivering instant responsiveness without client-side hydration delays.
+- **Critical CSS Inlining:** Stylesheets are compiled with LightningCSS and inlined directly into document `<head>`, eliminating render-blocking CSS network roundtrips.
 - **Invitation Vetting Flow:** Progressive client-side form captures applicant handles (Signal, Telegram, PGP), pre-fills referral tokens from URL search parameters (`?ref=CODE`), and dispatches to edge endpoints.
-- **High-Contrast Editorial Brutalism:** Monochromatic layout with warm parchment contrast and offset drop shadows designed for high aesthetic impact without visual weight penalty.
+- **Monospace Real-Time Counter:** Zero-dependency session countdown timer formatted with tabular figures to eliminate layout jitter.
 
-For the component tree and rendering lifecycle, see [`docs/FRONTEND_ARCHITECTURE.md`](docs/FRONTEND_ARCHITECTURE.md).
+For the sequence diagram and detailed lifecycle, see [`docs/FRONTEND_ARCHITECTURE.md`](docs/FRONTEND_ARCHITECTURE.md).
 
 ---
 
