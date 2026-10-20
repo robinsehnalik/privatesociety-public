@@ -22,15 +22,21 @@
 
 ---
 
-## Core Web Vitals & Performance Budget
+## Core Web Vitals & Real Performance Audits
 
-The architecture enforces strict performance constraints to consistently satisfy Google Core Web Vitals thresholds:
+Audited via **Lighthouse 13.5.0** (Desktop) across multi-region edge testing nodes:
 
-| Metric | Target Budget | Architectural Strategy |
-| :--- | :--- | :--- |
-| **LCP** (Largest Contentful Paint) | $\le$ 2.5s | Inlined critical stylesheets (`inlineStylesheets: "always"`), LightningCSS, edge caching |
-| **INP** (Interaction to Next Paint) | $\le$ 200ms | Zero main-thread framework runtime on public pages, non-blocking event handlers |
-| **CLS** (Cumulative Layout Shift) | $\le$ 0.1 | Tabular numbers (`tabular-nums`), monospace layout grids, reserved media aspect ratios |
+| Test Location | Performance | Accessibility | Best Practices | SEO | FCP | LCP | TTI | TBT | CLS |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Germany** | **100** | **100** | **100** | **100** | 306ms | 346ms | 346ms | 0ms | 0.02 |
+| **Finland** | **100** | **100** | **100** | **100** | 307ms | 342ms | 342ms | 0ms | 0.00 |
+| **US East** | **100** | **100** | **100** | **100** | 494ms | 494ms | 494ms | 0ms | 0.02 |
+
+### Performance Engineering Takeaways
+- **Perfect 100 Across All Categories:** Achieved straight 100/100/100/100 scores for Performance, Accessibility, Best Practices, and SEO across all geographic testing nodes.
+- **Sub-500ms Global LCP:** Critical CSS inlining via `inlineStylesheets: "always"`, combined with LightningCSS minification and Cloudflare Pages edge delivery, maintains Largest Contentful Paint between 342ms and 494ms worldwide.
+- **Zero Blocking Time (TBT = 0ms):** Eliminating client-side framework runtimes on public routes guarantees 0ms main-thread blocking time.
+- **Near-Zero Layout Shift (CLS $\le$ 0.02):** Monospace tabular numbers in countdown intervals and rigid editorial layout wrappers eliminate visual jitter.
 
 ---
 

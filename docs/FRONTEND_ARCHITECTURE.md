@@ -47,15 +47,21 @@ sequenceDiagram
 - **Progressive Client Script Modules:** Interactive components (the referral-aware admission form and the session countdown timer) use lightweight vanilla TypeScript modules directly bundled by Astro.
 - **Inlined Critical Stylesheets:** With `build: { inlineStylesheets: "always" }`, compiled styles are inlined directly into document `<head>`, eliminating network round-trips for external CSS files.
 
-### 2. Core Web Vitals Performance Budget
+### 2. Multi-Region Core Web Vitals Audit Data
 
-Rather than relying on unverified synthetic scores, the frontend architecture enforces concrete constraints to satisfy Google Core Web Vitals thresholds:
+Production benchmarks audited via **Lighthouse 13.5.0** (Desktop) across global test locations:
 
-| Metric | Target Budget | Architectural Enforcement Strategy |
-| :--- | :--- | :--- |
-| **LCP** (Largest Contentful Paint) | $\le$ 2.5s | <ul><li>Inlined critical stylesheets via `inlineStylesheets: "always"` eliminate render-blocking CSS requests</li><li>LightningCSS minification optimizes the CSS footprint during Vite compilation</li><li>Edge caching on Cloudflare Pages Anycast network ensures low TTFB</li></ul> |
-| **INP** (Interaction to Next Paint) | $\le$ 200ms | <ul><li>Zero hydration lag: all form elements and action buttons are immediately interactive on initial paint</li><li>No monolithic SPA runtime on the main thread</li><li>Form handlers use lightweight vanilla event listeners and non-blocking asynchronous dispatch</li></ul> |
-| **CLS** (Cumulative Layout Shift) | $\le$ 0.1 | <ul><li>Countdown timer uses tabular numbers (`tabular-nums`) and monospace typography to prevent text shifts on second changes</li><li>Editorial photography slots reserve fixed CSS aspect ratios</li><li>Font fallback metrics are aligned to minimize reflow during webfont swap</li></ul> |
+| Test Location | Performance | Accessibility | Best Practices | SEO | FCP | LCP | TTI | TBT | CLS |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Germany** | **100** | **100** | **100** | **100** | 306ms | 346ms | 346ms | 0ms | 0.02 |
+| **Finland** | **100** | **100** | **100** | **100** | 307ms | 342ms | 342ms | 0ms | 0.00 |
+| **US East** | **100** | **100** | **100** | **100** | 494ms | 494ms | 494ms | 0ms | 0.02 |
+
+#### Architectural Analysis:
+* **Perfect 100/100/100/100 Category Scores:** Clean HTML semantics, WCAG AA compliance, and zero runtime overhead yield straight 100s across all global audit points.
+* **TBT = 0ms:** Completely avoiding client-side virtual DOM hydration leaves the main thread entirely clear for user interaction.
+* **Sub-500ms Global LCP:** Through Vite + LightningCSS compilation and inlined critical styling, Largest Contentful Paint completes between 342ms and 494ms worldwide.
+* **CLS $\le$ 0.02:** Monospace tabular numbers (`tabular-nums`) and static layout geometry prevent layout shifts during countdown intervals.
 
 ---
 
@@ -82,4 +88,4 @@ Sanitized versions of the core UI components are available directly in this repo
 
 - **High-Contrast Monochromatic UI:** Clear typographic hierarchy optimized for dark-mode and high-contrast environments.
 - **Tactile UI Elements:** Crisp borders with offset drop shadows (`box-shadow: 6px 6px 0 #0d0d0d`) and hover transitions (`translate(-3px, -3px)`).
-- **Accessibility:** Full keyboard navigability and WCAG 2.1 AA compliant contrast ratios across all text elements.
+- **Accessibility:** Full keyboard navigability and WCAG 2.1 AA compliant contrast ratios across all text elements (audited at 100/100).
