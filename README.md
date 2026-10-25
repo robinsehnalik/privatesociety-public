@@ -10,6 +10,12 @@
 
 ---
 
+<p align="center">
+  <img src="images/ps-1.webp" alt="Private Society — Desktop Landing & Hero Showcase" width="100%">
+</p>
+
+---
+
 ## Overview & Scope
 
 | Attribute | Specification |
@@ -24,7 +30,41 @@
 
 ---
 
+## Visual Showcase & Interface Gallery
+
+Private Society implements a **Neo-Brutalist Archival Dispatch** aesthetic across all viewports, pairing high-contrast typography (`Dela Gothic One` & `Space Mono`) with tactile offset drop shadows and warm archival paper textures.
+
+### Desktop Experience
+
+<p align="center">
+  <img src="images/ps-2.webp" alt="Private Society — Gastronomical Philosophy & Session Briefing" width="100%">
+  <em>Curation Philosophy & Assembly Briefing — Session scheduling, live-fire culinary principles, and pillar archive.</em>
+</p>
+
+<p align="center">
+  <img src="images/ps-3.webp" alt="Private Society — Encrypted Member Portal" width="100%">
+  <em>Encrypted Member Portal (/portal) — Gated access with tasting flight cards, timeline schedules, and QR payment tier selection.</em>
+</p>
+
+### Mobile-First Responsive Engineering
+
+Strict aspect-ratio containers, fluid clamp typography, and zero-framework scripts guarantee zero Cumulative Layout Shift (CLS $\le$ 0.02) and instantaneous touch response on mobile viewports.
+
+<div align="center">
+
+| Mobile Hero & Navigation | Mobile Session Briefing & Admission |
+| :---: | :---: |
+| <img src="images/ps-4.webp" alt="Mobile Hero & Navigation" width="340px"> | <img src="images/ps-5.webp" alt="Mobile Session Briefing & Admission" width="340px"> |
+
+</div>
+
+---
+
 ## Core Web Vitals & Real Performance Audits
+
+<p align="center">
+  <img src="images/lighthouse.webp" alt="Lighthouse 13.5.0 Multi-Region Audit — 100/100/100/100 Perfect Scores" width="100%">
+</p>
 
 Audited via **Lighthouse 13.5.0** (Desktop) across multi-region edge testing nodes:
 
