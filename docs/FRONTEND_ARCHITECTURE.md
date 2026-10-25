@@ -1,10 +1,32 @@
 # Frontend Architecture & Engineering Decisions
 
+> [!NOTE]
+> This document specifically details the **client-side engineering, responsive layout patterns, Core Web Vitals optimizations, and sanitized UI component showcases**.
+> For the comprehensive end-to-end edge system architecture (Cloudflare Workers runtime, D1 SQLite schema, HMAC-SHA256 session cryptography, atomic magic link authentication, and automated Vitest suites), see the master **[`System Architecture Specification (architecture.md)`](../architecture.md)**.
+
 This document outlines the frontend architectural principles, rendering strategies, performance budgets, and UI engineering decisions implemented for **privatesocietylab.com** (Private Society Lab).
 
 ---
 
-## Client Interaction & Authentication Flow
+## Architectural Context & Separation of Concerns
+
+The application architecture is structured into two complementary layers:
+
+1. **System & Edge Layer ([`architecture.md`](../architecture.md)):**
+   - Cloudflare Workers SSR engine running Astro 7.
+   - Cloudflare D1 SQLite database (`schema.sql`) and Cloudflare R2 asset storage.
+   - Serverless authentication (`/api/auth/magic-link`, `/api/auth/verify`, `/api/auth/logout`) with HMAC-SHA256 session integrity.
+   - Transactional email dispatch pipelines via Resend and KideCMS status transition hooks.
+
+2. **Frontend & Client Viewport Layer (This Document):**
+   - Zero-framework baseline shipping pre-rendered HTML to the browser with zero client hydration delay.
+   - Vite + LightningCSS compilation pipeline with document-inlined critical stylesheets (`inlineStylesheets: "always"`).
+   - Defensive, zero-dependency client scripts for invitation vetting and real-time interval counters.
+   - Mobile-first responsive layouts maintaining strict WCAG 2.1 AA contrast and zero layout shifts.
+
+---
+
+## Client Interaction & Authentication Lifecycle
 
 ```mermaid
 sequenceDiagram
@@ -37,6 +59,8 @@ sequenceDiagram
         AuthAPI-->>Visitor: 200 OK (Generic notice to prevent email enumeration)
     end
 ```
+
+*(For extended sequence diagrams detailing the admin status lifecycle and cryptographic token hashing, refer to [`architecture.md § 3`](../architecture.md#3-core-data-flows--sequence-diagrams).)*
 
 ---
 
@@ -86,6 +110,9 @@ Sanitized versions of the core UI components are available directly in this repo
 
 ## Design System & Accessibility
 
-- **High-Contrast Monochromatic UI:** Clear typographic hierarchy optimized for dark-mode and high-contrast environments.
-- **Tactile UI Elements:** Crisp borders with offset drop shadows (`box-shadow: 6px 6px 0 #0d0d0d`) and hover transitions (`translate(-3px, -3px)`).
+For the exhaustive design tokens table and typography breakdown, see [`architecture.md § 7`](../architecture.md#7-design-system--visual-styling).
+
+- **High-Contrast Monochromatic UI:** Clear typographic hierarchy using `Dela Gothic One` for headings and `Space Mono` for metadata, optimized for dark-mode and high-contrast environments.
+- **Tactile UI Elements:** Crisp borders (`2px solid #0d0d0d`) with offset drop shadows (`box-shadow: 6px 6px 0 #0d0d0d`) and hover transitions (`translate(-3px, -3px)`).
+- **Self-Hosted Font Subsetting:** Custom WOFF2 font subsets served locally with `font-display: swap`, avoiding external Google Fonts blocking calls.
 - **Accessibility:** Full keyboard navigability and WCAG 2.1 AA compliant contrast ratios across all text elements (audited at 100/100).
