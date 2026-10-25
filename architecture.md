@@ -412,7 +412,50 @@ All five transactional emails are rendered as standalone, table-based HTML docum
 
 ---
 
-## 8. Development, Testing & Deployment
+---
+
+## 8. Frontend Performance & Core Web Vitals
+
+Private Society eliminates client-side JavaScript framework overhead on public routes. Pages are pre-rendered into static HTML with zero virtual DOM hydration, while critical styling is inlined directly into `<head>`.
+
+### 8.1. Multi-Region Production Benchmarks (Lighthouse 13.5.0 Desktop)
+
+Audited across global edge testing locations:
+
+| Test Location | Performance | Accessibility | Best Practices | SEO | FCP | LCP | TTI | TBT | CLS |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Germany** | **100** | **100** | **100** | **100** | 306ms | 346ms | 346ms | 0ms | 0.02 |
+| **Finland** | **100** | **100** | **100** | **100** | 307ms | 342ms | 342ms | 0ms | 0.00 |
+| **US East** | **100** | **100** | **100** | **100** | 494ms | 494ms | 494ms | 0ms | 0.02 |
+
+### 8.2. Architectural Performance Drivers
+
+- **Zero Total Blocking Time (TBT = 0ms):** Public routes load without heavy monolithic framework runtimes (e.g., React or Vue client bundles). Buttons, links, and form inputs are immediately interactive upon first paint.
+- **Sub-500ms Global LCP:** `inlineStylesheets: "always"` embeds LightningCSS-minified styles directly into the document `<head>`, eliminating render-blocking CSS network roundtrips. Combined with Cloudflare Anycast edge caching, First Contentful Paint completes in $\le 307\text{ms}$ in Europe and $\le 494\text{ms}$ in North America.
+- **Layout Shift Elimination (CLS $\le$ 0.02):** Monospace tabular numbers (`tabular-nums`) and static layout geometry prevent layout shifts during countdown intervals. Editorial photography slots maintain rigid aspect-ratio wrappers.
+
+---
+
+## 9. Showcase Components & Sanitized Patterns
+
+To demonstrate production engineering patterns without exposing proprietary client credentials or private business rules, the following sanitized implementations are available in this repository:
+
+1. **Member Vetting & Admission Form ([`components/SanitizedRegistrationForm.astro`](components/SanitizedRegistrationForm.astro)):**
+   - High-contrast brutalist visual design system (`#ede5d5` parchment background, 2px `#0d0d0d` borders, offset drop shadows `6px 6px 0 #0d0d0d`).
+   - Ingests and pre-fills URL query parameters (`?ref=CODE`) for sponsored member referrals.
+   - Enforces alternative communication handles (Signal, Telegram, PGP).
+   - Multi-phase asynchronous state machine with loading spinners and manual review confirmation text.
+
+2. **Session Countdown Timer ([`components/SanitizedCountdown.astro`](components/SanitizedCountdown.astro)):**
+   - Standalone vanilla JavaScript timer interval without external library dependencies.
+   - Tabular monospace numbers preventing horizontal and vertical layout shifts.
+
+3. **Client Vetting Pattern ([`examples/sanitized-ui-pattern.ts`](examples/sanitized-ui-pattern.ts)):**
+   - Independent TypeScript module demonstrating URL referral parameter parsing, identity handle validation, and async error recovery.
+
+---
+
+## 10. Development, Testing & Deployment
 
 ### Local Development
 ```bash
@@ -438,3 +481,4 @@ npx wrangler secret put RESEND_API_KEY
 # Build SSR worker bundle
 ASTRO_TELEMETRY_DISABLED=1 npm run build
 ```
+
