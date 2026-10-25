@@ -66,19 +66,11 @@ Strict aspect-ratio containers, fluid clamp typography, and zero-framework scrip
   <img src="images/lighthouse.webp" alt="Lighthouse 13.5.0 Multi-Region Audit — 100/100/100/100 Perfect Scores" width="100%">
 </p>
 
-Audited via **Lighthouse 13.5.0** (Desktop) across multi-region edge testing nodes:
-
-| Test Location | Performance | Accessibility | Best Practices | SEO | FCP | LCP | TTI | TBT | CLS |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Germany** | **100** | **100** | **100** | **100** | 306ms | 346ms | 346ms | 0ms | 0.02 |
-| **Finland** | **100** | **100** | **100** | **100** | 307ms | 342ms | 342ms | 0ms | 0.00 |
-| **US East** | **100** | **100** | **100** | **100** | 494ms | 494ms | 494ms | 0ms | 0.02 |
-
 ### Performance Engineering Takeaways
-- **Perfect 100 Across All Categories:** Achieved straight 100/100/100/100 scores for Performance, Accessibility, Best Practices, and SEO across all geographic testing nodes.
-- **Sub-500ms Global LCP:** Critical CSS inlining via `inlineStylesheets: "always"`, combined with LightningCSS minification and Cloudflare Pages edge delivery, maintains Largest Contentful Paint between 342ms and 494ms worldwide.
+- **100/100 Across All Categories:** Achieved straight 100/100/100/100 scores for Performance, Accessibility, Best Practices, and SEO across global edge testing locations.
+- **Sub-500ms Global LCP:** Critical CSS inlining via `inlineStylesheets: "always"`, combined with LightningCSS minification and Cloudflare Pages edge delivery, maintains rapid Largest Contentful Paint worldwide.
 - **Zero Blocking Time (TBT = 0ms):** Eliminating client-side framework runtimes on public routes guarantees 0ms main-thread blocking time.
-- **Near-Zero Layout Shift (CLS $\le$ 0.02):** Monospace tabular numbers in countdown intervals and rigid editorial layout wrappers eliminate visual jitter.
+- **Zero Layout Shift (CLS = 0):** Monospace tabular numbers in countdown intervals and rigid editorial layout wrappers eliminate visual jitter.
 
 For full benchmark analysis and technical drivers, see [`architecture.md § 8`](architecture.md#8-frontend-performance--core-web-vitals).
 
