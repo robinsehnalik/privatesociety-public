@@ -434,6 +434,15 @@ Audited across global edge testing locations:
 - **Sub-500ms Global LCP:** `inlineStylesheets: "always"` embeds LightningCSS-minified styles directly into the document `<head>`, eliminating render-blocking CSS network roundtrips. Combined with Cloudflare Anycast edge caching, First Contentful Paint completes in $\le 307\text{ms}$ in Europe and $\le 494\text{ms}$ in North America.
 - **Layout Shift Elimination (CLS $\le$ 0.02):** Monospace tabular numbers (`tabular-nums`) and static layout geometry prevent layout shifts during countdown intervals. Editorial photography slots maintain rigid aspect-ratio wrappers.
 
+### 8.3. Technical SEO, Indexation & Structured Data
+
+Search engine discovery and machine-readability are engineered for early domain authority:
+- **Schema.org Linked `@graph`:** Outputs connected `Organization` and `FoodEvent` schemas on public indexable pages.
+- **Indexation Discipline:** Strictly disallows crawl waste and soft-404 indexation by returning `noindex, nofollow` on `/portal`, `/login`, `/emails/preview`, and `/404`.
+- **Dynamic XML Sitemap:** Emits real `_updatedAt` timestamps queried directly from KideCMS singletons.
+
+For the exhaustive SEO audit and optimization strategy, see [`seo.md`](seo.md).
+
 ---
 
 ## 9. Showcase Components & Sanitized Patterns

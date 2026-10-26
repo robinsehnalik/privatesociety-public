@@ -6,7 +6,7 @@
 > the production source repository remains private. This repository serves as an architectural  
 > breakdown, responsive UI review, and web performance case study.
 
-[🔗 Visit Live Website](https://privatesocietylab.com) · [📐 System Architecture](architecture.md) · [👤 Return to Portfolio](https://sehnalik.com)
+[🔗 Visit Live Website](https://privatesocietylab.com) · [📐 System Architecture](architecture.md) · [🔍 SEO Strategy](seo.md) · [👤 Return to Portfolio](https://sehnalik.com)
 
 ---
 
@@ -27,6 +27,7 @@
 | **Data & Storage** | Cloudflare D1 (SQLite) / Cloudflare R2 Bucket (`privatesociety-assets`) |
 | **CMS & Mail Engine** | Embedded KideCMS Runtime / Resend Transactional Mail API |
 | **Architecture Specification** | Fully unified master document in [`architecture.md`](architecture.md) |
+| **SEO & Crawl Strategy** | Technical audit & indexation report in [`seo.md`](seo.md) |
 
 ---
 
@@ -73,6 +74,19 @@ Strict aspect-ratio containers, fluid clamp typography, and zero-framework scrip
 - **Zero Layout Shift (CLS = 0):** Monospace tabular numbers in countdown intervals and rigid editorial layout wrappers eliminate visual jitter.
 
 For full benchmark analysis and technical drivers, see [`architecture.md § 8`](architecture.md#8-frontend-performance--core-web-vitals).
+
+---
+
+## Technical SEO, Crawl Discipline & Structured Data
+
+In an early-stage deployment with zero initial backlink authority, the search footprint is protected through strict indexation discipline, semantic HTML landmarks, and rich machine-readable entities:
+
+- **Entity Clarity via Schema.org JSON-LD:** Every public route emits a linked `@graph` defining the brand as an `Organization` (Prague, CZ) and scheduled degustation assemblies as a `FoodEvent` (`Session #2: Heat & Grill 2` with attendance modes and capacity).
+- **Indexation Hygiene & Soft-404 Elimination:** Restricted views (`/portal`, `/login`, `/emails/preview`, and `/404`) enforce `<meta name="robots" content="noindex, nofollow">` and crawler disallow rules in `robots.txt`, concentrating domain equity exclusively on indexable public routes.
+- **Dynamic XML Sitemap:** Automatically reflects real `_updatedAt` timestamps queried directly from KideCMS singletons, eliminating daily build-date falsification.
+- **Resource Priority & Semantics:** Fixed `<picture>` fallback MIME definitions, removed competing `fetchpriority="high"` flags from logos to preserve LCP candidate bandwidth, and restored clean single `<main>` HTML5 document landmarks.
+
+For the full technical SEO audit and implementation details, see **[`seo.md`](seo.md)**.
 
 ---
 
