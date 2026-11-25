@@ -22,7 +22,7 @@
 | :--- | :--- |
 | **Site Type** | Invitation-Only Culinary Collective & Experiential Member Portal |
 | **Status** | Live in Production |
-| **Runtime Topology** | Edge-First SSR + Static Assets (Cloudflare Workers Runtime) |
+| **Runtime Topology** | Edge-First SSR + Static Assets (Cloudflare Workers Runtime / Bun v1.3+) |
 | **Frontend Stack** | Astro v7 / Tailwind CSS v4 (LightningCSS) / Vanilla TypeScript |
 | **Data & Storage** | Cloudflare D1 (SQLite) / Cloudflare R2 Bucket (`privatesociety-assets`) |
 | **CMS & Mail Engine** | Embedded KideCMS Runtime / Resend Transactional Mail API |

@@ -259,7 +259,8 @@ privatesociety/
 ├── astro.config.mjs               # Astro 7 SSR configuration, Cloudflare adapter, KideCMS & Tailwind v4 plugins
 ├── wrangler.toml                  # Cloudflare Worker bindings: ASSETS, CMS_DB (D1), CMS_ASSETS (R2), custom domain
 ├── schema.sql                     # Authoritative D1 SQLite schema migration (CMS collections, tokens, rate limits)
-├── package.json                   # Project dependencies and npm scripts (dev, build, preview, test)
+├── package.json                   # Project dependencies and bun scripts (dev, build, preview, test)
+├── bun.lock                       # Fast, deterministic dependency lockfile (bun@1.3.14)
 ├── tsconfig.json                  # Strict TypeScript configuration
 ├── .env.example                   # Template for required runtime secrets (RESEND_API_KEY, SESSION_SECRET)
 │
@@ -468,14 +469,14 @@ To demonstrate production engineering patterns without exposing proprietary clie
 
 ### Local Development
 ```bash
-# Install dependencies
-npm install
+# Install dependencies (using Bun)
+bun install
 
 # Start local Astro + Cloudflare Worker dev server
-npm run dev
+bun run dev
 
 # Run automated Vitest verification suite
-npm test
+bun test
 ```
 
 ### Database Migration & Production Deployment
@@ -488,6 +489,6 @@ npx wrangler secret put SESSION_SECRET
 npx wrangler secret put RESEND_API_KEY
 
 # Build SSR worker bundle
-ASTRO_TELEMETRY_DISABLED=1 npm run build
+ASTRO_TELEMETRY_DISABLED=1 bun run build
 ```
 

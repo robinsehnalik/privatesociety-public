@@ -65,3 +65,12 @@ In the early stage of deploying an invitation-only brand (`https://privatesociet
   - Cleaned up the `<picture>` fallback `<img>` in [`src/pages/index.astro`](src/pages/index.astro) with descriptive alt text (`"Private Society live-fire gastronomical assembly and Grand Cru wine tasting"`).
   - Removed `fetchpriority="high"` from the header logo so only the primary hero LCP candidate receives `fetchpriority="high"`.
   - Added intrinsic `width`, `height`, `loading="lazy"`, and `decoding="async"` attributes to all content and gallery images.
+
+### 2.7. CMS-Manageable Global and Page-Level SEO (`/admin`)
+- **Before:**
+  - Global SEO settings (brand title, default social share image, keywords, author, theme color, search engine indexing switch, Google site verification, and Schema.org Organization details) were hardcoded across static config and Astro components.
+  - Terms of Service and Privacy Policy lacked customizable social share cards (`ogImage`) and per-page keywords / noindex toggles in the CMS.
+- **After:**
+  - Created a dedicated **SEO & Site Metadata** (`seo`) singleton collection in [`src/cms/cms.config.ts`](src/cms/cms.config.ts) and [`schema.sql`](schema.sql) allowing admins to update global SEO titles, descriptions, keywords, OpenGraph images, Google search verification tokens, Twitter card formats, search engine indexing directives, and Schema.org Organization metadata directly inside `/admin`.
+  - Enhanced [`homepage`](src/cms/cms.config.ts), [`terms`](src/cms/cms.config.ts), and [`privacy`](src/cms/cms.config.ts) CMS collections with granular per-page SEO controls (`metaTitle`, `metaDescription`, `ogImage`, `metaKeywords`, `noindex`).
+  - Linked [`src/utils/consts.ts`](src/utils/consts.ts) and [`src/components/BaseHead.astro`](src/components/BaseHead.astro) to consume CMS values dynamically with instant fallbacks, and wired [`src/pages/sitemap.xml.ts`](src/pages/sitemap.xml.ts) to respect CMS `noindex` flags.
